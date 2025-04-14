@@ -1,0 +1,457 @@
+{
+    //Vim settings
+    "vim.enableNeovim": true,
+    "vim.useCtrlKeys": true,
+    "vim.useSystemClipboard": true,
+    "vim.foldfix": true,
+    "vim.highlightedyank.enable": true,
+    "vim.highlightedyank.color": "rgba(250, 189, 47, 0.5)",
+    "vim.highlightedyank.textColor": "#202020",
+    "vim.highlightedyank.duration": 150,
+    "vim.hlsearch": true,
+    "vim.leader": " ",
+    "vim.handleKeys": {
+        "<C-a>": false,
+        "<C-f>": false,
+        "<C-b>": false,
+        "<C-d>": false,
+        "<C-v>": false,
+        "<C-g>": false,
+    },
+    // Vim keybindings
+    "vim.insertModeKeyBindings": [
+        {
+            "before": [
+                "j",
+                "l"
+            ],
+            "after": [
+                "<Esc>"
+            ]
+        }
+    ],
+    "vim.insertModeKeyBindingsNonRecursive": [],
+    "vim.normalModeKeyBindingsNonRecursive": [
+        {
+            "before": [
+                "d"
+            ],
+            "after": [
+                "\"",
+                "_",
+                "d"
+            ]
+        },
+        {
+            "before": [
+                "<tab>"
+            ],
+            "commands": [
+                "workbench.action.nextEditor"
+            ]
+        },
+        {
+            "before": [
+                "<S-tab>"
+            ],
+            "commands": [
+                "workbench.action.previousEditor"
+            ]
+        },
+        {
+            "before": [
+                "y"
+            ],
+            "commands": [
+                "editor.action.clipboardCopyAction"
+            ]
+        },
+        {
+            "before": [
+                "p"
+            ],
+            "commands": [
+                "editor.action.clipboardPasteAction"
+            ]
+        },
+        {
+            "before": [
+                "o"
+            ],
+            "after": [
+                "i"
+            ]
+        },
+        {
+            "before": [
+                "i"
+            ],
+            "after": [
+                "k"
+            ]
+        },
+        {
+            "before": [
+                "k"
+            ],
+            "after": [
+                "j"
+            ]
+        },
+        {
+            "before": [
+                "j"
+            ],
+            "after": [
+                "h"
+            ]
+        },
+        {
+            "before": [
+                "l"
+            ],
+            "after": [
+                "l"
+            ]
+        },
+        {
+            "before": [
+                "leader",
+                "r"
+            ],
+            "commands": [
+                "editor.action.rename"
+            ]
+        },
+        {
+            "before": [
+                "leader",
+                "w"
+            ],
+            "commands": [
+                ":w!"
+            ]
+        },
+        {
+            "before": [
+                "leader",
+                "q"
+            ],
+            "commands": [
+                ":q!"
+            ]
+        },
+        {
+            "before": [
+                "leader",
+                "x"
+            ],
+            "commands": [
+                ":x!"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "k"
+            ],
+            "commands": [
+                "editor.action.showHover"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "c",
+                "a"
+            ],
+            "commands": [
+                "editor.action.quickFix"
+            ]
+        },
+        {
+            "after": [
+                "^"
+            ],
+            "before": [
+                "J"
+            ]
+        },
+        {
+            "after": [
+                "$"
+            ],
+            "before": [
+                "L"
+            ]
+        },
+        {
+            "after": [
+                "{"
+            ],
+            "before": [
+                "I"
+            ]
+        },
+        {
+            "after": [
+                "}"
+            ],
+            "before": [
+                "K"
+            ]
+        },
+    ],
+    "vim.visualModeKeyBindingsNonRecursive": [
+        {
+            "before": [
+                "d"
+            ],
+            "after": [
+                "\"",
+                "_",
+                "d"
+            ]
+        },
+        {
+            "before": [
+                "p"
+            ],
+            "commands": [
+                "editor.action.clipboardPasteAction"
+            ]
+        },
+        {
+            "before": [
+                "<tab>"
+            ],
+            "commands": [
+                "workbench.action.nextEditor"
+            ]
+        },
+        {
+            "before": [
+                "<S-tab>"
+            ],
+            "commands": [
+                "workbench.action.previousEditor"
+            ]
+        },
+        {
+            "after": [
+                "^"
+            ],
+            "before": [
+                "J"
+            ]
+        },
+        {
+            "after": [
+                "$"
+            ],
+            "before": [
+                "L"
+            ]
+        },
+        {
+            "before": [
+                "o"
+            ],
+            "after": [
+                "i"
+            ]
+        },
+        {
+            "before": [
+                "i"
+            ],
+            "after": [
+                "k"
+            ]
+        },
+        {
+            "before": [
+                "k"
+            ],
+            "after": [
+                "j"
+            ]
+        },
+        {
+            "before": [
+                "j"
+            ],
+            "after": [
+                "h"
+            ]
+        },
+        {
+            "before": [
+                "l"
+            ],
+            "after": [
+                "l"
+            ]
+        },
+        {
+            "before": [
+                ">"
+            ],
+            "commands": [
+                "editor.action.indentLines"
+            ]
+        },
+        {
+            "before": [
+                "<"
+            ],
+            "commands": [
+                "editor.action.outdentLines"
+            ]
+        }
+    ],
+    "extensions.experimental.affinity": {
+        "vscodevim.vim": 1
+    },
+    // Workbench settings
+    "workbench.iconTheme": "material-icon-theme",
+    "workbench.activityBar.location": "top",
+    "workbench.sideBar.location": "right",
+    "workbench.settings.applyToAllProfiles": [
+        "eslint.format.enable"
+    ],
+    "workbench.navigationControl.enabled": false,
+    "workbench.layoutControl.enabled": false,
+    "workbench.colorTheme": "Monokai",
+    //Editor settings
+    "breadcrumbs.enabled": false,
+    "chat.commandCenter.enabled": false,
+    "editor.fontFamily": "MesloLGS NF",
+    "editor.defaultFormatter": "vscode.typescript-language-features",
+    "editor.formatOnSave": true,
+    "editor.minimap.enabled": false,
+    "editor.cursorBlinking": "solid",
+    "editor.cursorSmoothCaretAnimation": "on",
+    "editor.wordWrap": "on",
+    "editor.unicodeHighlight.ambiguousCharacters": false,
+    "editor.cursorSurroundingLines": 5,
+    "editor.fontLigatures": true,
+    "editor.fontWeight": "bold",
+    "editor.inlineSuggest.enabled": true,
+    "editor.lineNumbers": "relative",
+    "editor.linkedEditing": true,
+    "editor.smoothScrolling": true,
+    "editor.stickyScroll.enabled": true,
+    "editor.suggest.insertMode": "replace",
+    "editor.suggestFontSize": 14,
+    //Other seetings
+    "errorLens.fontStyleItalic": true,
+    "extensions.autoUpdate": "onlyEnabledExtensions",
+    //Terminal settings
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+            "source": "PowerShell",
+            "icon": "terminal-powershell"
+        },
+        "Command Prompt": {
+            "path": [
+                "${env:windir}\\Sysnative\\cmd.exe",
+                "${env:windir}\\System32\\cmd.exe"
+            ],
+            "args": [],
+            "icon": "terminal-cmd"
+        },
+        "Git Bash": {
+            "source": "Git Bash"
+        },
+        "Ubuntu (WSL)": {
+            "path": "C:\\WINDOWS\\System32\\wsl.exe",
+            "args": [
+                "-d",
+                "Ubuntu"
+            ]
+        }
+    },
+    "terminal.integrated.defaultProfile.windows": "Ubuntu (WSL)",
+    //Git settings
+    "github.copilot.preferredAccount": "Lookytud",
+    "git.confirmSync": false,
+    "git.enableSmartCommit": true,
+    "git.openRepositoryInParentFolders": "never",
+    "remote.autoForwardPortsSource": "hybrid",
+    "gitlens.rebaseEditor.ordering": "asc",
+    "gitlens.advanced.messages": {
+        "suppressLineUncommittedWarning": true
+    },
+    //Linter settings
+    "cSpell.userWords": [
+        "Blackcat",
+        "nestjs",
+        "srcs",
+        "supertest",
+        "tianxia"
+    ],
+    "eslint.format.enable": true,
+    "[typescript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "eslint.probe": [
+        "astro",
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact",
+        "html",
+        "mdx",
+        "vue",
+        "markdown",
+        "json",
+        "jsonc",
+    ],
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "explorer.confirmDragAndDrop": false,
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "diffEditor.ignoreTrimWhitespace": false,
+    "[scss]": {
+        "editor.defaultFormatter": "vscode.css-language-features"
+    },
+    "scss.format.enable": false,
+    "playwright.showTrace": true,
+    "extensions.ignoreRecommendations": true,
+    // Custom CSS settings
+    "vscode_custom_css.imports": [
+        "file:///C:/Users/tandries/custom-vscode.css",
+    ],
+    "window.title": "${activeEditorShort}",
+    "workbench.colorCustomizations": {
+        "activityBar.activeBackground": "#808080",
+        "activityBar.background": "#808080",
+        "activityBar.foreground": "#15202b",
+        "activityBar.inactiveForeground": "#15202b99",
+        "activityBarBadge.background": "#dfffec",
+        "activityBarBadge.foreground": "#15202b",
+        "commandCenter.border": "#15202b99",
+        "sash.hoverBorder": "#808080",
+        "statusBar.background": "#171819",
+        "statusBar.foreground": "#ffffff",
+        "statusBarItem.hoverBackground": "#e45c00",
+        "statusBarItem.remoteBackground": "#808080",
+        "statusBarItem.remoteForeground": "#15202b",
+        "titleBar.activeBackground": "#808080",
+        "titleBar.activeForeground": "#15202b",
+        "titleBar.inactiveBackground": "#80808099",
+        "titleBar.inactiveForeground": "#15202b99",
+        "tab.activeBorder": "#ff0000",
+        "tab.unfocusedActiveBorder": "#000000",
+        "editorGroup.border": "#808080",
+        "editor.background": "#262335",
+        "statusBar.noFolderBackground": "#171819",
+        "statusBar.debuggingBackground": "#171819",
+        "statusBar.debuggingForeground": "#ffffff"
+    },
+}

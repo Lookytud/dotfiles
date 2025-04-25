@@ -144,8 +144,10 @@ LIVESTREAM_TEST_ARGS[user-tutorial]='--test_arg="e2e/specs/user-tutorial.spec.js
 
 declare -A BACKDROP_TEST_ARGS
 BACKDROP_TEST_ARGS[repeat]="--test_arg=--repeat-each=5"
-BACKDROP_TEST_ARGS[gallery]='--test_arg="e2e/specs/gallery.spec.js"'
-
+BACKDROP_TEST_ARGS[examples-page]='--test_arg="e2e/specs/examples-page.spec.js"'
+BACKDROP_TEST_ARGS[navigation-bar]='--test_arg="e2e/specs/navigation-bar.spec.js"'
+BACKDROP_TEST_ARGS[showcases]='--test_arg="e2e/specs/showcases.spec.js"'
+BACKDROP_TEST_ARGS[examples]='--test_arg="e2e/specs/examples.spec.js"'
 
 # Function to run bazel test with multiple arguments
 bazeltest() {
@@ -169,17 +171,18 @@ bazeltest() {
   local final_args=()
 
   # Loop through the provided arguments (like 'repeat', 'navigation-bar', etc.)
-  for arg in "$@"; do
-    # Check if the argument exists in the target-specific test arguments
-    if [[ -n "${DUNGEON_TEST_ARGS[$arg]}" ]]; then
-      # Add the full test argument to the final_args array
-      final_args+=("${DUNGEON_TEST_ARGS[$arg]}")
-    else
-      # If argument is not valid, print an error
-      echo "Error: Unknown test argument '$arg' for target '$target_key'."
-      return 1
-    fi
-  done
+for arg in "$@"; do
+  if [[ "$target_key" == "dungeon" && -n "${DUNGEON_TEST_ARGS[$arg]}" ]]; then
+    final_args+=("${DUNGEON_TEST_ARGS[$arg]}")
+  elif [[ "$target_key" == "livestream" && -n "${LIVESTREAM_TEST_ARGS[$arg]}" ]]; then
+    final_args+=("${LIVESTREAM_TEST_ARGS[$arg]}")
+  elif [[ "$target_key" == "backdrop" && -n "${BACKDROP_TEST_ARGS[$arg]}" ]]; then
+    final_args+=("${BACKDROP_TEST_ARGS[$arg]}")
+  else
+    echo "Error: Unknown test argument '$arg' for target '$target_key'."
+    return 1
+  fi
+done
 
   # If no valid arguments were provided, warn the user
   if [[ ${#final_args[@]} -eq 0 ]]; then
@@ -197,12 +200,13 @@ bazeltest() {
   eval "$command"
 }
 
-
-
-
-
-
-
-
-
-
+# Unbind Ctrl-L, Ctrl-K, Ctrl-I (Tab), and Ctrl-J (Newline)
+bindkey -r '^L'           # Clear screen
+bindkey -r '^K'           # Kill buffer
+bindkey -r '^I'           # Self-insert (Tab key)
+bindkey -r '^J'           # Self-insert (newline)
+bindkey -r '^[^I'         # Escape + Ctrl-I
+bindkey -r '^[^J'         # Escape + Ctrl-J
+bindkey -r '^[^L'         # Escape + Ctrl-L
+bindkey -r '^X^J'         # vi-join
+bindkey -r '^X^K'         # kill-buffer

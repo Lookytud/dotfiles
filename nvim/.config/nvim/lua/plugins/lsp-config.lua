@@ -1,7 +1,7 @@
--- Lazy.nvim plugin setup
-return { -- Mason and Mason-LSPConfig
+return {
 	{
-		"williamboman/mason.nvim",
+		"mason-org/mason.nvim",
+		version = "^1.0.0",
 		config = function()
 			require("mason").setup(
 				{
@@ -17,7 +17,8 @@ return { -- Mason and Mason-LSPConfig
 		end
 	},
 	{
-		"williamboman/mason-lspconfig.nvim",
+		"mason-org/mason-lspconfig.nvim",
+		version = "^1.0.0",
 		lazy = false,
 		opts = {
 			auto_install = true,
@@ -34,14 +35,21 @@ return { -- Mason and Mason-LSPConfig
 			-- import cmp-nvim-lsp plugin
 			local cmp_nvim_lsp = require("cmp_nvim_lsp")
 			local capabilities = cmp_nvim_lsp.default_capabilities()
-
+			-- local capabilities = require('blink.cmp').get_lsp_capabilities()
 			-- Change the Diagnostic symbols in the sign column (gutter)
-			-- (not in youtube nvim video)
 			local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
 			for type, icon in pairs(signs) do
 				local hl = "DiagnosticSign" .. type
 				vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
 			end
+			-- Set the diagnostic config with all icons
+			vim.diagnostic.config({
+				signs = true,
+				virtual_text = true, -- Specify Enable virtual text for diagnostics
+				underline = true, -- Specify Underline diagnostics
+				update_in_insert = false, -- Keep diagnostics active in insert mode
+			})
+
 			require("lspconfig").eslint.setup({
 				capabilities = capabilities,
 				on_attach = function(client, bufnr)
@@ -61,8 +69,9 @@ return { -- Mason and Mason-LSPConfig
 
 			require("lspconfig").ts_ls.setup({
 				capabilities = capabilities,
-				on_attach = function(client)
+				on_attach = function(client, bufnr)
 					client.server_capabilities.documentFormattingProvider = false
+					client.server_capabilities.documentRangeFormattingProvider = false
 				end
 			})
 
@@ -102,6 +111,9 @@ return { -- Mason and Mason-LSPConfig
 					opts.desc = "Go to declaration"
 					keymap.set("n", "gD", vim.lsp.buf.declaration, opts) -- go to declaration
 
+					opts.desc = "Show LSP referance"
+					keymap.set("n", "gr", "<cmd>Telescope lsp_references<CR>", opts)
+
 					opts.desc = "Show LSP definitions"
 					keymap.set("n", "gd", "<cmd>Telescope lsp_definitions<CR>", opts) -- show lsp definitions
 
@@ -136,9 +148,14 @@ return { -- Mason and Mason-LSPConfig
 					keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
 				end,
 			})
-			-- vim.keymap.set("n", "gh", vim.lsp.buf.hover, {})
-			-- vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
-			-- vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, {})
+			vim.api.nvim_create_autocmd("ColorScheme", {
+				callback = function()
+					vim.api.nvim_set_hl(0, "DiagnosticUnderlineError", { underline = true, sp = "#db302d" })
+					vim.api.nvim_set_hl(0, "DiagnosticUnderlineWarn", { underline = true, sp = "#e0af68" })
+					vim.api.nvim_set_hl(0, "DiagnosticUnderlineInfo", { underline = true, sp = "#0db9d7" })
+					vim.api.nvim_set_hl(0, "DiagnosticUnderlineHint", { underline = true, sp = "#10b981" })
+				end,
+			})
 		end
 	},
 }

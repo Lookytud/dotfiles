@@ -1,0 +1,25 @@
+{
+  "test.describe block": {
+    "prefix": "describe",
+    "body": [
+      "test.describe('${1:description}', () => {",
+      "  ${2:// tests}",
+      "});"
+    ],
+    "description": "test.describe block"
+  },
+  "test block": {
+    "prefix": "test",
+    "body": [
+      "test('${1:should do something}', async ({ ${2:page} }) => {",
+      "  ${3:// test body}",
+      "});"
+    ],
+    "description": "test block"
+  },
+  "expect assertion": {
+    "prefix": "expect",
+    "body": "expect(${1:actual}).to${2:Be}(${3:expected});",
+    "description": "expect assertion"
+  }
+}

@@ -38,6 +38,11 @@ return {
 
 				label = label ~= "" and label or "(empty)"
 
+				local bufnr = vim.fn.bufnr(harpoon_file_path)
+				local is_modified = (bufnr ~= -1 and vim.bo[bufnr].modified) and " ●" or ""
+
+				label = label .. is_modified
+
 				if current_file_path == harpoon_file_path then
 					contents[index] = string.format("%%#HarpoonNumberActive# %s. %%#HarpoonActive#%s ", index, label)
 				else

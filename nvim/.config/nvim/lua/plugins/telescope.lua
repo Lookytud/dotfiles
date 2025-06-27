@@ -1,7 +1,7 @@
 return {
 	{
 		"nvim-telescope/telescope.nvim",
-		tag = "0.1.5",
+		branch = "master",
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
@@ -14,11 +14,9 @@ return {
 			local actions = require("telescope.actions")
 			local builtin = require("telescope.builtin")
 
-			telescope.load_extension("fzf")
-			telescope.load_extension("themes")
-
 			telescope.setup({
 				defaults = {
+					path_display = { "filename_first" },
 					mappings = {
 						i = {
 							["<C-i>"] = actions.move_selection_previous, -- up
@@ -32,6 +30,7 @@ return {
 					},
 				},
 				extensions = {
+					fzf = {},
 					themes = {
 						enable_previewer = true,
 						enable_live_preview = true,
@@ -43,10 +42,51 @@ return {
 				},
 			})
 
+			telescope.load_extension("fzf")
+			telescope.load_extension("themes")
 			-- Keymaps
-			vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Find Files" })
+			vim.keymap.set("n", "<leader>f", builtin.find_files, { desc = "Find Files" })
 			vim.keymap.set("n", "<C-f>", builtin.current_buffer_fuzzy_find, { desc = "Search in File" })
-			vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "Open Buffers" })
+			vim.keymap.set("n", "<leader><leader>", function()
+				require("telescope.builtin").buffers({
+					sort_mru = true,
+					show_all_buffers = true,
+					previewer = false,
+					entry_maker = function(entry)
+						local devicons = require("nvim-web-devicons")
+						local bufnr = entry.bufnr
+
+						if not vim.api.nvim_buf_is_valid(bufnr) then
+							return nil
+						end
+
+						local name = vim.api.nvim_buf_get_name(bufnr)
+						local filename = vim.fn.fnamemodify(name, ":t")
+						local extension = vim.fn.fnamemodify(name, ":e")
+						local parent_path = vim.fn.fnamemodify(name, ":h")
+						local relative_path = vim.fn.fnamemodify(parent_path, ":~:.")
+
+						local icon, icon_hl = devicons.get_icon(filename, extension, { default = true })
+						local is_modified = vim.bo[bufnr] and vim.bo[bufnr].modified or false
+						local modified_flag = is_modified and " ●" or ""
+
+						local display = string.format("%s %-22s — %s%s", icon or "", filename, relative_path,
+							modified_flag)
+
+						return {
+							value = name,
+							ordinal = name,
+							display = display,
+							bufnr = bufnr,
+							filename = name,
+							-- Use the icon's highlight group if available
+							highlights = {
+								{ 0, #icon, icon_hl },
+							},
+						}
+					end,
+				})
+			end, { desc = "Open Buffers (Modified Mark + Icons)" })
 			vim.keymap.set("n", "<leader>ft", "<cmd>TodoTelescope<cr>", { desc = "Find todos" })
 			vim.keymap.set("n", "<leader>fd", "<cmd>Telescope diagnostics bufnr=0<cr>",
 				{ desc = "Diagnostics for current buffer" })

@@ -176,9 +176,10 @@ return {
 				completeopt = "menu,menuone,noinsert",
 			},
 			window = {
-				documentation = {
-					border = { '╭', '─', '╮', '│', '╯', '─', '╰', '│' },
-				},
+				-- documentation = {
+				-- 	border = { '╭', '─', '╮', '│', '╯', '─', '╰', '│' },
+				-- },
+				documentation = false,
 				completion = {
 					border = { '┌', '─', '┐', '│', '┘', '─', '└', '│' },
 				}
@@ -223,7 +224,7 @@ return {
 						fallback()
 					end
 				end, { 'i', 's' }),
-				["<Right>"] = cmp.mapping(function(fallback)
+				["<C-l>"] = cmp.mapping(function(fallback)
 					if cmp.visible() then
 						cmp.select_next_item()
 					elseif luasnip.expand_or_locally_jumpable() then
@@ -232,7 +233,7 @@ return {
 						fallback()
 					end
 				end, { "i", "s" }),
-				["<Left>"] = cmp.mapping(function(fallback)
+				["<C-j>"] = cmp.mapping(function(fallback)
 					if cmp.visible() then
 						cmp.select_prev_item()
 					elseif luasnip.locally_jumpable(-1) then

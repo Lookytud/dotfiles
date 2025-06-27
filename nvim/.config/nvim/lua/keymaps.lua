@@ -51,8 +51,8 @@ vim.keymap.set("v", "<A-k>", ":m '>+1<CR>gv=gv", opts)
 -- Move to the beginning of the line and then perform the action
 vim.keymap.set({ "n", "v" }, "J", "^", { noremap = true, silent = true })
 vim.keymap.set({ "n", "v" }, "L", "$", { noremap = true, silent = true })
-vim.keymap.set({ "n", "v" }, "I", "{", { noremap = true, silent = true })
-vim.keymap.set({ "n", "v" }, "K", "}", { noremap = true, silent = true })
+vim.keymap.set({ "n", "v" }, "I", "{zz", { noremap = true, silent = true })
+vim.keymap.set({ "n", "v" }, "K", "}zz", { noremap = true, silent = true })
 
 -- Map Ctrl+A to select all text
 vim.keymap.set("n", "<C-a>", "ggVG", { noremap = true, silent = true })
@@ -103,4 +103,35 @@ vim.keymap.set("n", "Q", "<cmd> wqa <CR>", opts)
 vim.keymap.set("n", "x", '"_x', opts)
 
 -- git
-vim.keymap.set("n", "<leader>gr", ":!git fetch upstream uat && git rebase upstream/uat<CR>", opts)
+vim.keymap.set("n", "<leader>gr", function()
+	local notify = require("notify") -- will be overridden by Noice if it's active
+
+	notify("Rebasing from upstream/uat...", "info", { title = "Git Rebase" })
+
+	vim.system({ "git", "fetch", "upstream", "uat" }, { text = true }, function(fetch_result)
+		if fetch_result.code ~= 0 then
+			notify("Fetch failed:\n" .. fetch_result.stderr, "error", { title = "Git Fetch" })
+			return
+		end
+
+		vim.system({ "git", "rebase", "upstream/uat" }, { text = true }, function(rebase_result)
+			if rebase_result.code == 0 then
+				notify("Rebase complete ✅", "info", { title = "Git Rebase" })
+			else
+				notify("Rebase failed:\n" .. rebase_result.stderr, "error", { title = "Git Rebase" })
+			end
+		end)
+	end)
+end, { desc = "Git fetch + rebase upstream/uat" })
+
+-- copy file path to clipboard
+vim.keymap.set("n", "<leader>yp", function()
+	local filePath = vim.fn.expand("%:~")             -- Gets the file path relative to the home directory
+	vim.fn.setreg("+", filePath)                      -- Copy the file path to the clipboard register
+	print("File path copied to clipboard: " .. filePath) -- Optional: print message to confirm
+end, { desc = "[P]Copy file path to clipboard" })
+
+vim.keymap.set("n", "gx", function()
+	local url = vim.fn.expand("<cfile>")
+	os.execute('wslview "' .. url .. '"')
+end, { desc = "Open URL in Windows browser" })

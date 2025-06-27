@@ -4,7 +4,7 @@ return {
 	dependencies = {
 		"nvim-lua/plenary.nvim",
 		"nvim-tree/nvim-web-devicons",
-		-- "MunifTanjim/nui.nvim",
+		"MunifTanjim/nui.nvim",
 	},
 	config = function()
 		-- Set up NeoTree with default position on the left (for <leader>e)

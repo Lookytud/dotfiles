@@ -1,7 +1,6 @@
 return {
 	{
 		"mason-org/mason.nvim",
-		version = "^1.0.0",
 		config = function()
 			require("mason").setup(
 				{
@@ -18,7 +17,6 @@ return {
 	},
 	{
 		"mason-org/mason-lspconfig.nvim",
-		version = "^1.0.0",
 		lazy = false,
 		opts = {
 			auto_install = true,
@@ -37,43 +35,35 @@ return {
 			local capabilities = cmp_nvim_lsp.default_capabilities()
 			-- local capabilities = require('blink.cmp').get_lsp_capabilities()
 			-- Change the Diagnostic symbols in the sign column (gutter)
-			local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
-			for type, icon in pairs(signs) do
-				local hl = "DiagnosticSign" .. type
-				vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-			end
-			-- Set the diagnostic config with all icons
+			local signs = {
+				[vim.diagnostic.severity.ERROR] = " ",
+				[vim.diagnostic.severity.WARN]  = " ",
+				[vim.diagnostic.severity.HINT]  = "󰠠 ",
+				[vim.diagnostic.severity.INFO]  = " ",
+			}
+
+			-- Apply the icons using the new API
 			vim.diagnostic.config({
-				signs = true,
-				virtual_text = true, -- Specify Enable virtual text for diagnostics
-				underline = true, -- Specify Underline diagnostics
-				update_in_insert = false, -- Keep diagnostics active in insert mode
-			})
-
-			require("lspconfig").eslint.setup({
-				capabilities = capabilities,
-				on_attach = function(client, bufnr)
-					client.server_capabilities.documentFormattingProvider = true
-
-					vim.api.nvim_create_autocmd("BufWritePre", {
-						buffer = bufnr,
-						callback = function()
-							vim.lsp.buf.format({ async = false })
-						end,
-					})
-				end,
-				settings = {
-					format = { enable = true },
+				signs = {
+					text = signs,
 				},
+				virtual_text = true,
+				underline = true,
+				update_in_insert = false,
 			})
+			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
+				vim.lsp.handlers.hover,
+				{ border = "rounded" }
+			)
 
-			require("lspconfig").ts_ls.setup({
-				capabilities = capabilities,
-				on_attach = function(client, bufnr)
-					client.server_capabilities.documentFormattingProvider = false
-					client.server_capabilities.documentRangeFormattingProvider = false
-				end
-			})
+			require("plugins.lsp.eslint-ls")
+			-- require("lspconfig").ts_ls.setup({
+			-- 	capabilities = capabilities,
+			-- 	on_attach = function(client, bufnr)
+			-- 		client.server_capabilities.documentFormattingProvider = false
+			-- 		client.server_capabilities.documentRangeFormattingProvider = false
+			-- 	end
+			-- })
 
 			require("lspconfig").lua_ls.setup({
 				capabilities = capabilities,
@@ -133,7 +123,9 @@ return {
 					keymap.set("n", "<leader>da", "<cmd>Telescope diagnostics bufnr=0<CR>", opts) -- show  diagnostics for file
 
 					opts.desc = "Show line diagnostics"
-					keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts) -- show diagnostics for line
+					keymap.set("n", "<leader>d", function()
+						vim.diagnostic.open_float(nil, { border = "rounded" })
+					end, opts)
 
 					opts.desc = "Go to previous diagnostic"
 					keymap.set("n", "[d", vim.diagnostic.goto_prev, opts) -- jump to previous diagnostic in buffer
@@ -144,8 +136,24 @@ return {
 					opts.desc = "Show documentation for what is under cursor"
 					keymap.set("n", "gh", vim.lsp.buf.hover, opts) -- show documentation for what is under cursor
 
-					opts.desc = "Restart LSP"
-					keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
+					vim.keymap.set("n", "<leader>rs", function()
+						local bufnr = vim.api.nvim_get_current_buf()
+						local clients = vim.lsp.get_clients({ bufnr = bufnr })
+
+						if vim.tbl_isempty(clients) then
+							vim.notify("No LSP clients attached to current buffer", vim.log.levels.WARN)
+							return
+						end
+
+						for _, client in ipairs(clients) do
+							vim.notify("Restarting LSP: " .. client.name, vim.log.levels.INFO)
+							client.stop(true)
+							vim.defer_fn(function()
+								require("lspconfig")[client.name].launch()
+								vim.notify("Reattached LSP: " .. client.name, vim.log.levels.INFO)
+							end, 300)
+						end
+					end, { desc = "Restart buffer's LSP" })
 				end,
 			})
 			vim.api.nvim_create_autocmd("ColorScheme", {

@@ -39,6 +39,25 @@ return {
                             winhighlight = { Normal = "Normal", FloatBorder = "DiagnosticInfo" },
                         },
                     },
+                    hover = {
+                        backend = "popup",
+                        relative = "cursor",
+                        position = {
+                            row = 1, -- row=1 means it pops *below* the cursor line
+                            col = 1, -- a small col offset so it’s not right over the text
+                        },
+                        border = {
+                            style = "rounded",
+                        },
+                        zindex = 100,
+                        win_options = {
+                            winblend = 0,
+                            winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder",
+                            cursorline = false,
+                            number = false,
+                            relativenumber = false,
+                        },
+                    },
                     mini = {
                         size = {
                             width = "auto",
@@ -55,7 +74,10 @@ return {
                     progress = {
                         enabled = true,
                     },
-                    -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+                    hover = {
+                        enabled = false,
+                        view = "hover", -- ensures it uses the "hover" popup defined in views
+                    },
                     override = {
                         ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
                         ["vim.lsp.util.stylize_markdown"] = true,
@@ -70,13 +92,12 @@ return {
                         filter = {
                             event = "msg_show",
                             any = {
-                                { find = '%d+L, %d+B' },
-                                { find = '; after #%d+' },
-                                { find = '; before #%d+' },
-                                { find = '%d fewer lines' },
-                                { find = '%d more lines' },
+                                { find = "%d+L, %d+B" },
+                                { find = "; after #%d+" },
+                                { find = "; before #%d+" },
                             },
                         },
+                        view = "mini",
                     },
                     {
                         filter = {
@@ -87,7 +108,7 @@ return {
                     },
                 },
                 messages = {
-                    enabled = false,
+                    enabled = true,
                 },
                 health = {
                     checker = true,

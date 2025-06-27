@@ -3,5 +3,8 @@
         "unused-local",
         "unused-function",
         "deprecated"
+    ],
+    "diagnostics.globals": [
+        "vim"
     ]
 }

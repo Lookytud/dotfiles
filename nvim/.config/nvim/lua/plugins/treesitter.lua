@@ -51,7 +51,7 @@ return {
 						scope_incremental = false,
 					},
 				},
-				additional_vim_regex_highlighting = false,
+				additional_vim_regex_highlighting = { "markdown" },
 			})
 		end,
 	},
